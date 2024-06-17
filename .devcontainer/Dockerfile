@@ -25,3 +25,10 @@ ARG COCOGITTO_VERSION="6.1.0"
 RUN if [ "${INSTALL_COCOGITTO}" = "true" ]; then \
     su vscode -c "umask 0002 && mkdir -p /home/vscode/.local/bin && wget -qO- https://github.com/cocogitto/cocogitto/releases/download/${COCOGITTO_VERSION}/cocogitto-${COCOGITTO_VERSION}-x86_64-unknown-linux-musl.tar.gz | tar xvz --strip-components=1 -C /home/vscode/.local/bin && chmod +x /home/vscode/.local/bin/cog"; \
     fi
+
+ARG INSTALL_HELMDOCS="true"
+ARG HELMDOCS_VERSION="1.13.1"
+
+RUN if [ "${INSTALL_HELMDOCS}" = "true" ]; then \
+    su vscode -c "umask 0002 && mkdir -p /home/vscode/.local/bin && wget -qO- https://github.com/norwoodj/helm-docs/releases/download/v${HELMDOCS_VERSION}/helm-docs_${HELMDOCS_VERSION}_Linux_x86_64.tar.gz | tar xz -C /home/vscode/.local/bin && chmod +x /home/vscode/.local/bin/helm-docs"; \
+    fi

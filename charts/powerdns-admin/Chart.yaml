@@ -1,0 +1,22 @@
+apiVersion: v2
+name: powerdns-admin
+description: A Helm chart for PowerDNS-Admin 
+
+type: application
+
+version: 0.1.0
+
+sources:
+  - https://github.com/witcom-gmbh/powerdns-admin-helm
+
+dependencies:
+  # # Dependency charts.
+  # Helpers charts.
+  # - name: common
+  #   repository: https://charts.bitnami.com/bitnami
+  #   version: 2.x.x
+maintainers:
+  - name: iceman91176
+    email: c.buchberger@witcom.de
+
+appVersion: "v0.4.2"

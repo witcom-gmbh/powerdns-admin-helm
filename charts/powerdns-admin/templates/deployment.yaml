@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "powerdns-admin.fullname" . }}
+  labels:
+    {{- include "powerdns-admin.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "powerdns-admin.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "powerdns-admin.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "powerdns-admin.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "powerdns-admin.fullname" . }}
+                key: session-secret          
+          - name: PDNSADMIN_DB_HOST
+          {{- if .Values.database.existingSecretHostKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: {{ .Values.database.existingSecretHostKey }}
+          {{- else }}
+            value: {{ .Values.database.host }} 
+          {{- end }}
+          - name: PDNSADMIN_DB_PORT
+          {{- if .Values.database.existingSecretPortKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: {{ .Values.database.existingSecretPortKey }}
+          {{- else }}
+            value: {{ .Values.database.port | quote }}
+          {{- end }}
+          - name: PDNSADMIN_DB_NAME
+          {{- if .Values.database.existingSecretDatabaseKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: {{ .Values.database.existingSecretDatabaseKey }}
+          {{- else }}
+            value: {{ .Values.database.database }}
+          {{- end }}
+          - name: PDNSADMIN_DB_USER
+          {{- if .Values.database.existingSecretUserKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: {{ .Values.database.existingSecretUserKey }}
+          {{- else }}
+            value: {{ .Values.database.user }}
+          {{- end }}
+          - name: PDNSADMIN_DB_PASSWORD
+          {{- if .Values.database.existingSecretPasswordKey }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.existingSecret }}
+                key: {{ .Values.database.existingSecretPasswordKey }}
+          {{- else }}
+            value: {{ .Values.database.password }}
+          {{- end }}
+          - name: SQLALCHEMY_DATABASE_URI
+            value: {{ .Values.database.type }}://$(PDNSADMIN_DB_USER):$(PDNSADMIN_DB_PASSWORD)@$(PDNSADMIN_DB_HOST):$(PDNSADMIN_DB_PORT)/$(PDNSADMIN_DB_NAME)
+
+{{- if .Values.extraEnvs }}
+{{ toYaml .Values.extraEnvs | indent 12 }}
+{{- end }}
+{{- if .Values.envFrom }}
+          envFrom:
+{{ toYaml .Values.envFrom | indent 12 }}
+{{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.startupProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
