@@ -2,7 +2,7 @@
 
 A Helm chart for PowerDNS-Admin
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.4.2](https://img.shields.io/badge/AppVersion-v0.4.2-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.1.0](https://img.shields.io/badge/AppVersion-v0.1.0-informational?style=flat-square)
 
 ## Installing the Chart
 
@@ -61,7 +61,7 @@ $ helm install my-release foo-bar/powerdns-admin
 | ingress.tls | list | `[]` |  |
 | livenessProbe.failureThreshold | int | `5` |  |
 | livenessProbe.httpGet.path | string | `"/"` |  |
-| livenessProbe.httpGet.port | string | `"http"` |  |
+| livenessProbe.httpGet.port | int | `80` |  |
 | livenessProbe.periodSeconds | int | `10` |  |
 | nameOverride | string | `""` |  |
 | nodeSelector | object | `{}` |  |
@@ -70,12 +70,12 @@ $ helm install my-release foo-bar/powerdns-admin
 | podSecurityContext | object | `{}` |  |
 | readinessProbe.failureThreshold | int | `5` |  |
 | readinessProbe.httpGet.path | string | `"/"` |  |
-| readinessProbe.httpGet.port | string | `"http"` |  |
+| readinessProbe.httpGet.port | int | `80` |  |
 | readinessProbe.periodSeconds | int | `10` |  |
 | replicaCount | int | `1` |  |
 | resources | object | `{}` |  |
 | securityContext | object | `{}` |  |
-| service.port | int | `80` |  |
+| service.port | int | `9191` |  |
 | service.type | string | `"ClusterIP"` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.automount | bool | `true` |  |
@@ -83,7 +83,7 @@ $ helm install my-release foo-bar/powerdns-admin
 | serviceAccount.name | string | `""` |  |
 | startupProbe.failureThreshold | int | `30` |  |
 | startupProbe.httpGet.path | string | `"/"` |  |
-| startupProbe.httpGet.port | string | `"http"` |  |
+| startupProbe.httpGet.port | int | `80` |  |
 | startupProbe.initialDelaySeconds | int | `5` |  |
 | startupProbe.periodSeconds | int | `10` |  |
 | tolerations | list | `[]` |  |
