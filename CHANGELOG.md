@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## v0.1.0 - 2024-06-17
+#### Bug Fixes
+- Fixes problems with indentation and service-ports - (ff4e8e8) - iceman91176
+#### Features
+- Adds first release of helm-chart - (de6cd8b) - iceman91176
+
+- - -
+
 ## 0.1.0 - 2024-06-17
 #### Bug Fixes
 - Fixes problems with indentation and service-ports - (ff4e8e8) - iceman91176
