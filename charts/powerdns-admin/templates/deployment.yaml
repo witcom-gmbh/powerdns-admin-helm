@@ -89,9 +89,8 @@ spec:
           {{- end }}
           - name: SQLALCHEMY_DATABASE_URI
             value: {{ .Values.database.type }}://$(PDNSADMIN_DB_USER):$(PDNSADMIN_DB_PASSWORD)@$(PDNSADMIN_DB_HOST):$(PDNSADMIN_DB_PORT)/$(PDNSADMIN_DB_NAME)
-
 {{- if .Values.extraEnvs }}
-{{ toYaml .Values.extraEnvs | indent 12 }}
+{{ toYaml .Values.extraEnvs | indent 10 }}
 {{- end }}
 {{- if .Values.envFrom }}
           envFrom:
@@ -99,7 +98,7 @@ spec:
 {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: 80
               protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}

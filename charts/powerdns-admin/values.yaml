@@ -85,7 +85,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 9191
 
 ingress:
   enabled: false
@@ -118,21 +118,21 @@ resources: {}
 livenessProbe:
   httpGet:
     path: /
-    port: http
+    port: 80
   failureThreshold: 5
   periodSeconds: 10
 
 readinessProbe:
   httpGet:
     path: /
-    port: http
+    port: 80
   failureThreshold: 5
   periodSeconds: 10
 
 startupProbe:
   httpGet:
     path: /
-    port: http
+    port: 80
   initialDelaySeconds: 5
   failureThreshold: 30
   periodSeconds: 10
